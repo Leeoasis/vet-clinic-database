@@ -29,14 +29,12 @@ CREATE TABLE species (
    name varchar(255) NOT NULL
 );
 
+
 /* Modify animals table */
-
-
-
-
-
-
-
-
+ALTER TABLE animals
+ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY;
+DROP COLUMN species,
+ADD COLUMN species_id INTEGER REFERENCES species(id),
+ADD COLUMN owner_id INTEGER REFERENCES owners(id),
 
 
