@@ -166,12 +166,14 @@ GROUP BY a.id
 ORDER BY visit_count DESC 
 LIMIT 1;
 
-SELECT a.name AS animal_name, MIN(v.visit_date) AS first_visit
+SELECT a.name, MIN(v.visit_date) AS first_visit
 FROM animals a
 INNER JOIN visits v ON a.id = v.animal_id
 INNER JOIN vets vt ON vt.id = v.vet_id
 WHERE vt.name = 'Maisy Smith'
-GROUP BY a.name;
+GROUP BY a.name
+ORDER BY first_visit ASC
+LIMIT 1;
 
 SELECT a.*, v.*, MAX(visits.visit_date) AS most_recent_visit_date
 FROM visits
@@ -187,12 +189,13 @@ INNER JOIN vets vt ON vt.id = v.vet_id
 LEFT JOIN specializations s ON vt.id = s.vet_id AND a.species_id = s.species_id
 WHERE s.vet_id IS NULL;
 
-SELECT a.species_id, COUNT(*) AS num_visits
+SELECT s.name AS species_name, COUNT(*) AS num_visits
 FROM visits v
 INNER JOIN animals a ON v.animal_id = a.id
+INNER JOIN species s ON a.species_id = s.id
 WHERE v.vet_id = (
   SELECT id FROM vets WHERE name = 'Maisy Smith'
 )
-GROUP BY a.species_id
+GROUP BY s.name
 ORDER BY num_visits DESC
 LIMIT 1;
